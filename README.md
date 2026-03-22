@@ -1,6 +1,8 @@
 # Selianord MCT Website
 
 Professional business website built using **Blazor WebAssembly (.NET)** for **Selianord MCT — Microsoft Certified Trainer**.
+<img width="1889" height="699" alt="image" src="https://github.com/user-attachments/assets/2c71d59f-730d-4af4-ae29-c5caccbe3d25" />
+
 
 This project showcases a responsive multi-page training and services website designed to present:
 
