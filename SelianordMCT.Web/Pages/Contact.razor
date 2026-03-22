@@ -1,4 +1,5 @@
 ﻿@page "/contact"
+@using SelianordMCT.Web.Models
 
 <PageTitle>Contact | Selianord MCT</PageTitle>
 
@@ -7,47 +8,132 @@
         <p class="section-tag">Contact</p>
         <h1>Let’s Work Together</h1>
         <p class="page-subtitle">
-            Reach out for training bookings, software development enquiries,
-            learning content support, or collaboration opportunities.
+            Reach out for Microsoft training, software development, learning content support,
+            or collaboration opportunities.
         </p>
     </div>
 </section>
 
 <section class="section">
-    <div class="container contact-grid">
-        <div class="contact-card">
-            <h3>Contact Information</h3>
-            <p><strong>Name:</strong> Lusukama Selemani</p>
-            <p><strong>Role:</strong> Microsoft Certified Trainer</p>
-            <p><strong>Email:</strong> your-email@example.com</p>
-            <p><strong>Phone:</strong> +27 xx xxx xxxx</p>
-            <p><strong>Location:</strong> South Africa</p>
+    <div class="container contact-info-grid">
+
+        <div class="about-card">
+            <h3>Email</h3>
+            <p>selianordev@gmail.com</p>
         </div>
 
-        <div class="contact-card">
-            <h3>Send an Enquiry</h3>
-
-            <div class="form-group">
-                <label>Full Name</label>
-                <input class="form-input" placeholder="Enter your full name" />
-            </div>
-
-            <div class="form-group">
-                <label>Email Address</label>
-                <input class="form-input" placeholder="Enter your email address" />
-            </div>
-
-            <div class="form-group">
-                <label>Subject</label>
-                <input class="form-input" placeholder="Enter the subject" />
-            </div>
-
-            <div class="form-group">
-                <label>Message</label>
-                <textarea class="form-input form-textarea" placeholder="Enter your message"></textarea>
-            </div>
-
-            <button class="btn btn-primary">Send Enquiry</button>
+        <div class="about-card">
+            <h3>Phone</h3>
+            <p>+27 61 581 7580</p>
         </div>
+
+        <div class="about-card">
+            <h3>Location</h3>
+            <p>South Africa</p>
+        </div>
+
     </div>
 </section>
+
+<section class="section section-soft">
+    <div class="container contact-main-grid">
+
+        <div class="contact-form-card">
+            <p class="section-tag">Send an Enquiry</p>
+            <h2>Request Training or Support</h2>
+
+            @if (isSubmitted)
+            {
+                <div class="success-message">
+                    Thank you. Your enquiry has been submitted successfully.
+                </div>
+            }
+
+            <EditForm Model="@enquiry" OnValidSubmit="@HandleValidSubmit" class="contact-form">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <div class="form-group">
+                    <label for="fullname">Full Name</label>
+                    <InputText id="fullname" @bind-Value="enquiry.FullName" class="form-input" placeholder="Enter your full name" />
+                    <ValidationMessage For="@(() => enquiry.FullName)" />
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <InputText id="email" @bind-Value="enquiry.EmailAddress" class="form-input" placeholder="Enter your email address" />
+                    <ValidationMessage For="@(() => enquiry.EmailAddress)" />
+                </div>
+
+                <div class="form-group">
+                    <label for="service">Service Required</label>
+                    <InputSelect id="service" @bind-Value="enquiry.ServiceRequired" class="form-input">
+                        <option value="">-- Select a service --</option>
+                        <option>Microsoft Training</option>
+                        <option>Corporate Training</option>
+                        <option>Software Development</option>
+                        <option>Learning Content Development</option>
+                        <option>Other Enquiry</option>
+                    </InputSelect>
+                    <ValidationMessage For="@(() => enquiry.ServiceRequired)" />
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <InputTextArea id="message" @bind-Value="enquiry.Message" class="form-input form-textarea" placeholder="Tell me more about your training or project needs" />
+                    <ValidationMessage For="@(() => enquiry.Message)" />
+                </div>
+
+                <button type="submit" class="btn btn-primary">Send Enquiry</button>
+            </EditForm>
+        </div>
+
+        <div class="contact-side-grid">
+
+            <div class="about-card">
+                <p class="section-tag">Why Contact Me</p>
+                <h3>Practical, professional support</h3>
+                <p>
+                    I work with private learners, academic institutions, and organisations
+                    seeking practical Microsoft training, technical learning support,
+                    and software development guidance.
+                </p>
+            </div>
+
+            <div class="about-card">
+                <p class="section-tag">What You Can Enquire About</p>
+                <ul class="about-list">
+                    <li>Microsoft certification training</li>
+                    <li>Azure and cloud learning support</li>
+                    <li>Custom course delivery</li>
+                    <li>Technical learning content</li>
+                    <li>Software development services</li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+<section class="section cta-section">
+    <div class="container cta-content">
+        <h2>Ready to get started?</h2>
+        <p>
+            Let’s discuss how I can support your learning, training, or digital solution goals.
+        </p>
+        <a href="mailto:your-email@example.com" class="btn btn-primary">Email Me Directly</a>
+    </div>
+</section>
+
+@code {
+    private ContactEnquiry enquiry = new();
+    private bool isSubmitted = false;
+
+    private void HandleValidSubmit()
+    {
+        isSubmitted = true;
+
+        enquiry = new ContactEnquiry();
+    }
+}
