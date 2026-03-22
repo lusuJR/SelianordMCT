@@ -1,16 +1,48 @@
 ﻿@inherits LayoutComponentBase
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+<header class="top-navbar">
+
+    <div class="container nav-container">
+
+        <div class="brand">
+
+            Selianord  />MCT
+
         </div>
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+        <nav class="nav-links">
+            <a href="/">Home</a>
+            <a href="/about">About</a>
+            <a href="/services">Services</a>
+            <a href="/courses">Courses</a>
+            <a href="/portfolio">Portfolio</a>
+            <a href="/contact">Contact</a>
+        </nav>
+
+        <a href="/contact" class="btn btn-primary">
+
+            Book Training
+
+        </a>
+
+    </div>
+
+</header>
+
+
+<main>
+
+    @Body
+
+</main>
+
+
+<footer class="footer">
+
+    <div class="container">
+
+        © @DateTime.Now.Year Selianord MCT — Microsoft Certified Trainer
+
+    </div>
+
+</footer>
