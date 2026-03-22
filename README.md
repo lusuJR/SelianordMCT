@@ -1,4 +1,9 @@
 # Selianord MCT Website
+![.NET](https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet&logoColor=white)
+![Blazor](https://img.shields.io/badge/Blazor-WebAssembly-5C2D91?logo=blazor&logoColor=white)
+![C#](https://img.shields.io/badge/C%23-Developer-239120?logo=csharp&logoColor=white)
+![Status](https://img.shields.io/badge/Status-In%20Progress-0078D4)
+![License](https://img.shields.io/badge/License-Portfolio-blue)
 
 Professional business website built using **Blazor WebAssembly (.NET)** for **Selianord MCT — Microsoft Certified Trainer**.
 <img width="1889" height="699" alt="image" src="https://github.com/user-attachments/assets/2c71d59f-730d-4af4-ae29-c5caccbe3d25" />
