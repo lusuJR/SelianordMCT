@@ -1,0 +1,138 @@
+﻿@page "/admin/enquiries"
+@using SelianordMCT.Web.Models
+@using SelianordMCT.Web.Services
+@inject AuthService AuthService
+@inject NavigationManager Nav
+@inject EnquiryApiService EnquiryApiService
+
+<PageTitle>Admin | Enquiries</PageTitle>
+
+<section class="page-hero">
+    <div class="container">
+        <p class="section-tag">Admin Dashboard</p>
+        <h1>Submitted Enquiries</h1>
+        <p class="page-subtitle">
+            Review and manage training requests submitted through the website.
+        </p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+
+        @if (isLoading)
+        {
+            <p>Loading enquiries...</p>
+        }
+        else if (!string.IsNullOrWhiteSpace(errorMessage))
+        {
+            <div class="error-message">
+                @errorMessage
+            </div>
+        }
+        else if (enquiries == null || !enquiries.Any())
+        {
+            <p>No enquiries submitted yet.</p>
+        }
+        else
+        {
+            <table class="admin-table">
+
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Service</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var enquiry in enquiries)
+                    {
+                        <tr>
+                            <td>@enquiry.FullName</td>
+                            <td>@enquiry.EmailAddress</td>
+                            <td>@enquiry.ServiceRequired</td>
+
+                            <td>
+                                <select class="status-dropdown @GetStatusClass(enquiry.Status)"
+                                        value="@enquiry.Status"
+                                        @onchange="async e => await UpdateStatus(enquiry.Id, e.Value?.ToString())">
+
+                                    <option value="New">New</option>
+                                    <option value="Contacted">Contacted</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Completed">Completed</option>
+                                </select>
+                            </td>
+
+                            <td>@enquiry.CreatedAt.ToShortDateString()</td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        }
+
+    </div>
+</section>
+
+@code {
+    private List<ContactEnquiry>? enquiries;
+    private bool isLoading = true;
+    private string? errorMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var isAuth = await AuthService.IsAuthenticatedAsync();
+
+            if (!isAuth)
+            {
+                Nav.NavigateTo("/admin/enquiries", forceLoad: true);
+                return;
+            }
+
+            enquiries = await EnquiryApiService.GetEnquiriesAsync();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Unable to load enquiries. {ex.Message}";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private async Task UpdateStatus(int id, string? newStatus)
+    {
+        if (string.IsNullOrWhiteSpace(newStatus))
+            return;
+
+        try
+        {
+            await EnquiryApiService.UpdateStatusAsync(id, newStatus);
+            enquiries = await EnquiryApiService.GetEnquiriesAsync();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Unable to update status. {ex.Message}";
+        }
+    }
+
+    private string GetStatusClass(string? status)
+    {
+        return status switch
+        {
+            "New" => "status-new",
+            "Contacted" => "status-contacted",
+            "In Progress" => "status-progress",
+            "Completed" => "status-completed",
+            _ => ""
+        };
+    }
+}

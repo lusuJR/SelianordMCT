@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="SelianordMCT.API/SelianordMCT.API.csproj" />
   <Project Path="SelianordMCT.Web/SelianordMCT.Web.csproj" />
 </Solution>

@@ -1,40 +1,54 @@
-﻿@inherits LayoutComponentBase
+﻿@using SelianordMCT.Web.Services
+@inject AuthService AuthService
+@inject NavigationManager Nav
+@inherits LayoutComponentBase
 
 <header class="top-navbar">
-
     <div class="container nav-container">
 
         <div class="brand">
-    Selianord MCT
-    <span class="brand-subtitle">Microsoft Certified Trainer</span>
-</div>
+            <span class="brand-title">Selianord MCT</span>
+            <span class="brand-subtitle">Microsoft Certified Trainer</span>
+        </div>
 
         <nav class="nav-links">
-            <a href="/">Home</a>
-            <a href="/about">About</a>
-            <a href="/services">Services</a>
-            <a href="/courses">Courses</a>
-            <a href="/portfolio">Portfolio</a>
-            <a href="/contact">Contact</a>
+            <NavLink href="/" Match="NavLinkMatch.All">Home</NavLink>
+            <NavLink href="/about">About</NavLink>
+            <NavLink href="/services">Services</NavLink>
+            <NavLink href="/courses">Courses</NavLink>
+            <NavLink href="/portfolio">Portfolio</NavLink>
+            <NavLink href="/contact">Contact</NavLink>
         </nav>
 
-        <a href="/contact" class="btn btn-primary">
+        <div class="nav-actions">
+            @if (isAuthenticated)
+            {
+                <NavLink href="/admin/enquiries" class="btn btn-outline">
+                    Admin Dashboard
+                </NavLink>
 
-            Request Training Quote
+                <button type="button" class="btn btn-outline" @onclick="Logout">
+                    Logout
+                </button>
+            }
+            else
+            {
+                <NavLink href="/login" class="btn btn-outline">
+                    Admin Login
+                </NavLink>
+            }
 
-        </a>
+            <a href="/contact" class="btn btn-primary">
+                Request Training Quote
+            </a>
+        </div>
 
     </div>
-
 </header>
 
-
 <main>
-
     @Body
-
 </main>
-
 
 <footer class="footer">
     <div class="container footer-grid">
@@ -87,3 +101,19 @@
         </div>
     </div>
 </footer>
+
+@code {
+    private bool isAuthenticated;
+
+    protected override async Task OnInitializedAsync()
+    {
+        isAuthenticated = await AuthService.IsAuthenticatedAsync();
+    }
+
+    private async Task Logout()
+    {
+        await AuthService.LogoutAsync();
+        isAuthenticated = false;
+        Nav.NavigateTo("/");
+    }
+}
