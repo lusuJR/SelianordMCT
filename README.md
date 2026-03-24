@@ -87,7 +87,8 @@ Includes contact details and enquiry form layout (UI stage).
 ---
 
 ## Project Structure
-<img width="685" height="475" alt="image" src="https://github.com/user-attachments/assets/b083ae55-f939-442e-b411-d1eefa0519d6" />
+<img width="466" height="1016" alt="image" src="https://github.com/user-attachments/assets/0e1bbf00-7f54-47cb-b617-96fd42038fc1" />
+
 
 ---
 
