@@ -4,6 +4,8 @@ namespace SelianordMCT.Web.Models
 {
     public class ContactEnquiry
     {
+        public int Id { get; set; }
+
         [Required(ErrorMessage = "Full name is required.")]
         [StringLength(100, ErrorMessage = "Full name cannot exceed 100 characters.")]
         public string? FullName { get; set; }
@@ -18,5 +20,9 @@ namespace SelianordMCT.Web.Models
         [Required(ErrorMessage = "Message is required.")]
         [StringLength(1000, ErrorMessage = "Message cannot exceed 1000 characters.")]
         public string? Message { get; set; }
+
+        public string? Status { get; set; }
+
+        public DateTime CreatedAt { get; set; }
     }
 }

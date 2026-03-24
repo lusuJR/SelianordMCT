@@ -1,0 +1,86 @@
+﻿@page "/login"
+@using System.Net.Http.Json
+@using SelianordMCT.Web.Services
+@inject AuthService AuthService
+@inject NavigationManager Nav
+@inject HttpClient Http
+
+<PageTitle>Admin Login</PageTitle>
+
+<section class="section">
+    <div class="container">
+        <h2>Admin Login</h2>
+
+        <div class="form-card">
+            <input placeholder="Username"
+                   @bind="username"
+                   class="form-control" />
+
+            <input placeholder="Password"
+                   type="password"
+                   @bind="password"
+                   class="form-control" />
+
+            <button class="btn-primary" @onclick="HandleLogin">
+                Login
+            </button>
+
+            @if (!string.IsNullOrEmpty(error))
+            {
+                <p class="error">@error</p>
+            }
+        </div>
+    </div>
+</section>
+
+@code {
+    private string username = "";
+    private string password = "";
+    private string error = "";
+
+    private async Task HandleLogin()
+    {
+        error = "";
+
+        try
+        {
+            var apiClient = new HttpClient
+            {
+                BaseAddress = new Uri("https://localhost:7044/")
+            };
+
+            var response = await apiClient.PostAsJsonAsync("api/auth/login", new
+            {
+                username,
+                password
+            });
+
+            if (!response.IsSuccessStatusCode)
+            {
+                error = "Invalid login credentials";
+                return;
+            }
+
+            var result = await response.Content.ReadFromJsonAsync<LoginResponse>();
+
+            if (result is null || string.IsNullOrWhiteSpace(result.Token))
+            {
+                error = "Login failed. No token returned.";
+                return;
+            }
+
+            await AuthService.LoginAsync(result.Token);
+
+            Nav.NavigateTo("/admin/enquiries");
+        }
+        catch
+        {
+            error = "Unable to connect to the server.";
+        }
+    }
+
+    public class LoginResponse
+    {
+        public string Token { get; set; } = string.Empty;
+    }
+}
