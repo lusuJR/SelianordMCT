@@ -43,8 +43,25 @@ public class EnquiryApiService
 
     public async Task<bool> SubmitEnquiryAsync(ContactEnquiry enquiry)
     {
-        var response = await _httpClient.PostAsJsonAsync("api/enquiries", enquiry);
-        return response.IsSuccessStatusCode;
+        try
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/enquiries", enquiry);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            else
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Enquiry submission failed: {response.StatusCode} - {errorContent}");
+                return false;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception while submitting enquiry: {ex.Message}");
+        }
     }
 
     public async Task UpdateStatusAsync(int id, string status)
